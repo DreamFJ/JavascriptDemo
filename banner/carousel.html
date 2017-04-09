@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>旋转木马幻灯片</title>
+	<link rel="stylesheet" href="css/carousel.css">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/carousel.js"></script>
+</head>
+<body>
+	<!-- json对象，属性带引号 -->
+	<div class="J_Poster poster-main" data-setting='{
+    												"width":800,
+    												"height":270,
+				    								"posterWidth":640,
+    												"posterHeight":270,
+    												"scale":0.9,
+    												"speed":10,
+    												"autoPlay":true,
+    		                                        "delay":2000,
+    												"verticalAlign":"middle"
+                                                    }'>
+		<div class="poster-btn poster-prev-btn"></div>
+		<ul class="poster-list">
+			<li class="poster-item"><a href="#"><img src="images/1.jpg" width="100%" height="100%"></a></li>
+			<li class="poster-item"><a href="#"><img src="images/2.jpg" width="100%" height="100%"></a></li>
+			<li class="poster-item"><a href="#"><img src="images/3.jpg" width="100%" height="100%"></a></li>
+			<li class="poster-item"><a href="#"><img src="images/4.jpg" width="100%" height="100%"></a></li>
+			<li class="poster-item"><a href="#"><img src="images/5.jpg" width="100%" height="100%"></a></li>
+		</ul>
+		<div class="poster-btn poster-next-btn"></div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			//创建Carousel对象
+			var carousel = Carousel.init($(".J_Poster")); 
+			// 配置参数，用一个对象保存一个插件的各个参数，好在js里直接配置，
+			// 但是如果有多个插件就要设置多个setting，这样达不到每一个插件是独立的效果。
+			// 可以把参数配置到每一个节点属性上去，最后传到js里的参数是不一样的，独立存在。
+			// var setting={
+			// 	width:1000,
+			// 	height:270,
+			// 	posterWidth:640,
+			// 	posterHeight:270,
+			// 	scale:0.9,
+			// 	speed:500,
+			// 	verticalAlign:"middle"
+			// };
+		});
+	</script>
+</body>
+</html>
