@@ -1,7 +1,7 @@
 //创建一个闭包，保护变量。
 //在前面加一个分号，防止前面引入的js文件没有闭合引起错误，如果闭合了多加一个分号也不会报错。
 ;(function($){
-	//定义一个Carousel类，构造函数
+	//定义一个Carousel类(构造函数)，参数是一个jQuery对象
 	var Carousel=function(poster){
 		// 用self保存this对象
 		var self=this;
@@ -35,7 +35,7 @@
 			"posterWidth":640,	//幻灯片第一帧的宽度
     		"posterHeight":270,	//幻灯片第一帧的宽度
     		"scale":0.9,	//记录显示比例关系
-    		"speed":500,
+    		"speed":500,	//切换的速度
     		"autoPlay":false,	//是否自动播放
     		"delay":5000,	//自动播放的间隔时间
     		"verticalAlign":"middle"
@@ -99,13 +99,14 @@
 		carouselRotate:function(dir){
 			// 保存this对象，避免this漂移
 			var _this_=this;
+			// 层级关系
 			var zIndexArr=[];
 
 			if(dir==="left"){
 				this.posterItems.each(function(){
 					// 保存单个对象
 					var self=$(this),
-						// 不明白为什么要.get(0)
+						// 获取每一帧图片的上一帧图片，如果是第一帧图片，则获取最后一帧图片，达到一个循环
 						prev=self.prev().get(0) ? self.prev() : _this_.posterLastItem,
 						width=prev.width(),
 						height=prev.height(),
@@ -115,11 +116,10 @@
 						top=prev.css("top");
 
 					zIndexArr.push(zIndex);
-
 					self.animate({
 						width:width,
 						height:height,
-						// 在这里设置zIndex用户体验不好，所以现在外面用一个数组存放
+						// 在这里设置zIndex用户体验不好，先显示层级了其他的才变换到位，所以现在外面用一个数组存放
 						// zIndex:zIndex,
 						opacity:opacity,
 						left:left,
@@ -136,7 +136,6 @@
 				this.posterItems.each(function(){
 					// 保存单个对象
 					var self=$(this),
-						// 不明白为什么要.get(0)
 						next=self.next().get(0) ? self.next() : _this_.posterFirstItem,
 						width=next.width(),
 						height=next.height(),
@@ -186,27 +185,26 @@
 			// 先记下第一帧大小
 			var rw=this.setting.posterWidth,
 				rh=this.setting.posterHeight,
+				// 俩图片之间的间距
 				gap=((this.setting.width-this.setting.posterWidth)/2)/level;
 				// sl=this.setting.scale;
 				
 			// 第一帧left值
 			var firstLeft=(this.setting.width-this.setting.posterWidth)/2;
+			// 右边图片的起点
 			var fixOffsetLeft=firstLeft+rw;	
 
 			rightSlice.each(function(i){
 				level--;
-				// rw = rw*sl;
-				// rh = rh*sl;
 				rw = rw*self.setting.scale;
 				rh = rh*self.setting.scale;
-				var j=i;
 
 				$(this).css({
 					zIndex:level,
 					width:rw,
 					height:rh,
-					opacity:1/(++j),
-					left:fixOffsetLeft+(++i)*gap-rw,
+					opacity:1/(++i),
+					left:fixOffsetLeft+i*gap-rw,
 					top:self.setVerticalAlign(rh)
 				});
 			});
@@ -265,20 +263,24 @@
 
 			// 计算上下切换按钮的宽度
 			var w = (this.setting.width-this.setting.posterWidth)/2;
+			// 设置向左按钮的宽高、层级
 			this.prevBtn.css({
 				width:w,
 				height:this.setting.height,
 				zIndex:Math.ceil(this.posterItems.size()/2)
 			});
+			// 设置向右按钮的宽高、层级
 			this.nextBtn.css({
 				width:w,
 				height:this.setting.height,
 				zIndex:Math.ceil(this.posterItems.size()/2)
 			});
+			// 设置第一帧图片的宽高、位置、层级
 			this.posterFirstItem.css({
 				width:this.setting.posterWidth,
 				height:this.setting.posterHeight,
 				left:w,
+				top:(this.setting.height-this.setting.posterHeight)/2,
 				zIndex:Math.floor(this.posterItems.size()/2)
 			});
 		},
